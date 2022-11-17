@@ -40,6 +40,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,6 +51,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'graphene_django',
     # Local apps
+    'api',
     'events',
     'config',
     'core',
@@ -68,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'api.middleware.MetaCleanupMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -88,6 +91,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "config.asgi.application"
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
@@ -107,6 +111,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, "..", "static/")
 MEDIA_ROOT = os.path.join(BASE_DIR, "..", "media/")
 
 
+# Graphene
+GRAPHENE = {
+    'SCHEMA': 'config.schema.schema',
+    'MIDDLEWARE': [
+        'api.middleware.MetaFieldResolverMiddleware',
+        'api.middleware.TimeoutMiddleware',
+    ]
+}
+GRAPHENE_MUTATIONS = []
+GRAPHENE_NODE_DICT = {}
+GRAPHQL_TIMEOUT = 1000
 
 
 # Password validation
