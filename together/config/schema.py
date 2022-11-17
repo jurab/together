@@ -7,6 +7,7 @@ from users.schema import *
 from locations.schema import *
 from organisations.schema import *
 from events.schema import *
+from chats.schema import *
 
 
 schema = get_global_registry().get_schema()

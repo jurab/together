@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Local apps
     'api',
     'events',
+    'chats',
     'config',
     'core',
     'locations',

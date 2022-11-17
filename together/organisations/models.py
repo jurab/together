@@ -23,7 +23,7 @@ CATEGORIES = names_enum(
 
 class Organisation(TimestampModel):
     name = models.CharField(max_length=256, unique=True, blank=True)
-    members = models.ManyToManyField(User, through='Membership', related_name='admined_organisations')
+    members = models.ManyToManyField(User, through='OrganisationMembership', related_name='admined_organisations')
 
     category = models.CharField(max_length=32, choices=CATEGORIES)
 
@@ -46,7 +46,7 @@ class Role(models.Model):
     name = models.CharField(max_length=256, choices=ROLES)
 
 
-class Membership(TimestampModel):
-    organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, related_name='memberships')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='memberships')
+class OrganisationMembership(TimestampModel):
+    organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, related_name='organisation_memberships')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organisation_memberships')
     role = models.CharField(max_length=256, choices=ROLES)
