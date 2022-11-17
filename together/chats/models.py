@@ -33,6 +33,9 @@ class ChatMembership(TimestampModel):
 
 class Message(TimestampModel):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
-    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='messages')
+    sender = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='messages')
 
     text = models.TextField()
+
+    class Meta:
+        ordering = 'created',

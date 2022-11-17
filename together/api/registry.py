@@ -60,9 +60,9 @@ def register_mutation(TargetMutation):
     return TargetMutation
 
 
-def get_schema():
+def get_schema(subscription=None):
     """Return api schema, construct it if it doesn't exist yet."""
-    return get_global_registry().get_schema()
+    return get_global_registry().get_schema(subscription)
 
 
 def reset_schema():
@@ -260,10 +260,10 @@ class Registry(metaclass=Singleton):
     def get_registered_type(self, Type):
         return self.get_type(Type=Type, include_custom=False)
 
-    def get_schema(self):
+    def get_schema(self, subscription=None):
         """Construct schema if it doesn't exist and return existing/created one."""
         if not self.schema:
-            self._construct_schema()
+            self._construct_schema(subscription)
         return self.schema
 
     def reset(self):
@@ -284,11 +284,11 @@ class Registry(metaclass=Singleton):
         TargetType = self._register_django_type(TargetType, typename) if is_django_schema else self._register_custom_type(TargetType, typename)
         return TargetType
 
-    def _construct_schema(self):
+    def _construct_schema(self, subscription=None):
         """Force all registered schemas and mutations to inherit from graphene object types and return graphene.Schema."""
         Query = self._construct_root_query()
         Mutation = self._construct_root_mutation() if self.mutations else None
-        self.schema = graphene.Schema(query=Query, mutation=Mutation)
+        self.schema = graphene.Schema(query=Query, mutation=Mutation, subscription=subscription)
 
     def _construct_root_mutation(self):
         """Return a graphene.Mutation class with all the registered mutations attached as attributes."""

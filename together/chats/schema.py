@@ -1,11 +1,15 @@
 
+import channels
+import channels_graphql_ws
 import graphene
 
-from api.fields import NestedField, ReverseField
+from api.fields import NestedField, ReverseField, ModelField
 from api.filters import DjangoFilter, PaginationFilter, IDFilter
-from api.registry import register_type
+from api.mutations import Save
+from api.registry import register_type, register_mutation
 
 from .models import Chat, Message
+from users.models import User
 from users.schema import UserType
 
 
@@ -34,10 +38,9 @@ class MessageType:
     class Meta:
         model = Message
         queryset = Message.objects.all()
-        fields = ('id created modified author text'.split())
+        fields = ('id created modified text'.split())
         lookups = (
             ('id', graphene.ID()),
-            ('author__name', graphene.String()),
         )
         filters = {
             'django_filter': DjangoFilter,
@@ -45,6 +48,6 @@ class MessageType:
             'ids': IDFilter
         }
         related_fields = {
-            NestedField('author', UserType),
+            NestedField('sender', UserType),
             ReverseField(ChatType, 'messages'),
         }
