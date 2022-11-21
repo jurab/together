@@ -4,6 +4,7 @@ import graphene
 from api.fields import NestedField, ReverseField
 from api.filters import DjangoFilter, PaginationFilter, IDFilter
 from api.mutations import Save
+from api.permissions import IsAuthenticated
 from api.registry import register_type, register_mutation
 
 from .models import Chat, Message
@@ -53,6 +54,9 @@ class MessageType:
 
 @register_mutation
 class SendChatMessage(Save):
+
+    permissions = IsAuthenticated,
+
     class Meta:
         model = Message
         exclude_arguments = 'id created modified'.split()
@@ -60,6 +64,8 @@ class SendChatMessage(Save):
     @classmethod
     def mutate(cls, root, info, chat, sender, text):
         """Mutation "resolver" - store and broadcast a message."""
+
+        cls.check_permissions(info, chat)
 
         chat = Chat.objects.get(id=chat)
         sender = User.objects.get(id=sender)

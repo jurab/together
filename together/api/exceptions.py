@@ -1,4 +1,7 @@
 
+from graphql import GraphQLError
+
+
 class MetaConfigurationError(Exception):
     message = "Meta class improperly configured for Type."
 
@@ -21,6 +24,10 @@ class RelatedTypeNotFound(Exception):
     def __init__(self, message, model):
         self.message = message
         self.model = model
+
+
+class PermissionDenied(GraphQLError):
+    pass
 
 
 class TimeoutExit(BaseException):

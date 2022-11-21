@@ -3,6 +3,7 @@ import graphene
 from collections import OrderedDict
 
 from .converter import convert_django_field_to_input
+from .exceptions import PermissionDenied
 from .fields import ModelField
 
 from utils.core import inherit_from, copy_class
@@ -42,6 +43,12 @@ class Mutation:
             setattr(Mutation, cls.get_schema_name(), cls.field())
             return Mutation
         return cls
+
+    @classmethod
+    def check_permissions(cls, info, obj=None):
+        if hasattr(cls, 'permissions'):
+            for PermissionClass in cls.permissions:
+                PermissionClass.check(info, obj)
 
 
 class ModelMutation(Mutation):
