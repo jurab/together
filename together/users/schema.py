@@ -1,8 +1,10 @@
 
 import graphene
+import graphql_jwt
 
 from api.filters import DjangoFilter, PaginationFilter, IDFilter
-from api.registry import register_type
+from api.mutations import Mutation
+from api.registry import register_type, register_mutation
 
 from .models import User
 
@@ -22,3 +24,10 @@ class UserType:
             'pagination': PaginationFilter,
             'ids': IDFilter
         }
+
+
+@register_mutation
+class Mutation(Mutation):
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()

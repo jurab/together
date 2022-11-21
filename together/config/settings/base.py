@@ -117,6 +117,7 @@ GRAPHENE = {
     'MIDDLEWARE': [
         'api.middleware.MetaFieldResolverMiddleware',
         'api.middleware.TimeoutMiddleware',
+        "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ]
 }
 GRAPHENE_MUTATIONS = []
@@ -143,6 +144,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'users.User'
+
+AUTHENTICATION_BACKENDS = [
+    "graphql_jwt.backends.JSONWebTokenBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
 
 
 # Internationalization
