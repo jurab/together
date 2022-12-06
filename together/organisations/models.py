@@ -18,6 +18,7 @@ CATEGORIES = names_enum(
     'school',
     'sports',
     'volunteering'
+    'business',
 )
 
 

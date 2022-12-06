@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'core',
     'locations',
     'organisations',
+    'posts',
     'users',
     'videos',
 ]

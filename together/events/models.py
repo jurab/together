@@ -14,10 +14,12 @@ class Event(TimestampModel):
     organisation = models.ForeignKey(Organisation, on_delete=models.CASCADE, related_name='events')
 
     image = models.ForeignKey(Image, null=True, on_delete=models.SET_NULL, related_name='events')
+    gallery = models.ManyToManyField(Image, related_name='event_galleries')
+
     members = models.ManyToManyField(User, through='Attendance', related_name='events')
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 ROLES = names_enum(

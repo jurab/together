@@ -2,6 +2,7 @@ import graphene
 import re
 
 from .parsing import DjangoLookup
+from utils.core import inherit_from
 from utils.misc import eval_or_none
 from utils.string import camel_to_snake
 
@@ -129,3 +130,26 @@ class IDFilter:
 
     def apply(self, qs, ids):
         return qs.filter(id__in=ids)
+
+
+def enum_filter_factory(name, field, field_description):
+
+    class Enum: pass
+    Enum.__name__ = f"{name.title()}Enum"
+
+    for key, value in field_description.items():
+        setattr(Enum, key.capitalize(), key.lower())
+
+    setattr(Enum, 'field_description', field_description)
+    setattr(Enum, 'get_field_descriptions', lambda self: self.field_description.get(self.name))
+    setattr(Enum, 'description', property(lambda self: self.get_field_description()))
+
+    Enum = inherit_from(Enum, graphene.Enum)
+
+    class Filter: pass
+    Filter.__name__ = f"{name.title()}Filter"
+
+    setattr(Filter, 'input', Enum())
+    setattr(Filter, 'apply', lambda self, qs, value: qs.filter(**{'field': value}))
+
+    return Filter

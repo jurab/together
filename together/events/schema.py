@@ -1,7 +1,7 @@
 
 import graphene
 
-from api.fields import NestedField, ModelListField
+from api.fields import NestedField, ModelListField, ReverseField
 from api.filters import DjangoFilter, PaginationFilter, IDFilter
 from api.registry import register_type
 
@@ -50,6 +50,7 @@ class EventType:
         }
         related_fields = {
             NestedField('organisation', OrganisationType),
+            ReverseField(OrganisationType, 'events'),
         }
 
     def resolve_members(event, *args, **kwargs):
