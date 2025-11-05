@@ -15,6 +15,24 @@ organisations {
 
 Registering a Django model as a schema:
 ```python
+class RoleEnum(graphene.Enum):
+    ADMIN = 'admin'
+    GOING = 'going'
+    FOLLOWING = 'following'
+
+    def get_field_description(self):
+        descriptions = {
+            "ADMIN": "Has admin privileges for this event.",
+            "GOING": "Wants to attend the event.",
+            "FOLLOWING": "Follows the event."
+        }
+        return descriptions.get(self.name)
+
+    @property
+    def description(self):
+        return self.get_field_description()
+
+        
 @register_type('Event')
 class EventType:
 
