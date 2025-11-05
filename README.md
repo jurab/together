@@ -72,7 +72,7 @@ The PSQL DB needs to have the citext and hstore extensions:
 
 # The GraphQL api
 
-You can easily register new schemas in the GraphQL API with the [api module](/plantjammer/api).
+You can easily register new schemas in the GraphQL API with the [api module](/together/api).
 
 ## Contents
 
